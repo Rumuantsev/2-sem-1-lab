@@ -47,8 +47,9 @@ namespace Lab3
                     Console.WriteLine("Детерминант матрицы: " + IntResult);
                     break;
                 case 5:
-                    IntResult = SquareMatrix.Determinant(Matrix1);
-                    Console.WriteLine("Обратная матрица: " + IntResult);
+                    ArrayResult = SquareMatrix.Inverse(Matrix1);
+                    Console.WriteLine("Обратная матрица: ");
+                    ArrayResult.PrintMatrix();
                     break;
             }
         }
