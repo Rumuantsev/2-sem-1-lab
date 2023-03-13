@@ -17,7 +17,13 @@ namespace Lab3
             PrototypeSquareMatrix Result = new PrototypeSquareMatrix(Size);
 
             Result.Size = this.Size;
-            Result.Matrix = this.Matrix;
+            for (int ColumnIndex = 0; ColumnIndex < Size; ++ColumnIndex)
+            {
+                for (int RowIndex = 0; RowIndex < Size; ++RowIndex)
+                {
+                    Result.Matrix[ColumnIndex, RowIndex] = this.Matrix[ColumnIndex, RowIndex];
+                }
+            }
 
             return Result;
         }
