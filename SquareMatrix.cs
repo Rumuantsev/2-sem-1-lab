@@ -263,13 +263,13 @@ namespace Lab3
             {
                 for (int ColumnIndex = 0; ColumnIndex < Matrix.Size; ++ColumnIndex)
                 {
-                    if (Matrix.Matrix[RowIndex, ColumnIndex] == 0) ;
+                    if (Matrix.Matrix[RowIndex, ColumnIndex] != 0) ;
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
-            return true;
+            return false;
         }
 
 
