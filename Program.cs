@@ -1,57 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lab4
+namespace Lab7
 {
     internal class Program
     {
+        delegate List<int> InOrderTraversal(BinaryTree<int> Tree);
+        delegate void AscendingBinaryTree(BinaryTree<int> Tree);
+        delegate void DescendingBinaryTree(BinaryTree<int> Tree);
         static void Main(string[] args)
         {
-            Console.Write("Введите полный путь к директории: ");
-            string InputPath = @"C:\";
-            InputPath = Console.ReadLine();
-            int Choice = 0;
-            while (Choice != 4)
+            int NodesQuantity = 10; 
+            int MaximumValue = 100; 
+            Random Randomizer = new Random();
+
+            BinaryTree<int> Tree = new BinaryTree<int>(Randomizer.Next(MaximumValue), null);
+            for (int NodeIndex = 0; NodeIndex < NodesQuantity - 1; ++NodeIndex)
             {
-                Console.Clear();
-                Console.WriteLine("Выберите действие: ");
-                Console.WriteLine("1. Редактировать файл\n2. Найти файлы по ключевому слову\n" +
-                                  "3. Проиндексировать все файлы в рабочей папке в отдельный файл\n4.Закрыть консоль");
-                string FileName;
-                Choice = int.Parse(Console.ReadLine());
-                if (Choice < 1 || Choice > 3)
-                {
-                    Console.WriteLine("Ошибка! Введите число от 1 до 3");
-                }
-                Console.Clear();
-                switch (Choice)
-                {
-                    case 1:
-                        Console.Clear();
-                        Console.Write("Введите имя файла, который вы хотите отредактировать: ");
-                        FileName = Console.ReadLine();
-                        FilesEditor.InitiateEdit(InputPath + @"\" + FileName + ".txt", FileName);
-                        Choice = 0;
-                        break;
-                    case 2:
-                        Console.Write("Введите ключевые слова для поиска: ");
-                        string InputKeyword = Console.ReadLine();
-                        Console.Clear();
-                        Seeker.KeywordFilesSeeker(InputPath, InputKeyword);
-                        Console.ReadKey();
-                        Choice = 0;
-                        break;
-                    case 3:
-                        Indexator.Indexation(InputPath);
-                        Choice = 0;
-                        break;
-                }
+                Tree.Add(Randomizer.Next(MaximumValue));
             }
-            
+
+            InOrderTraversal ListerLambda = (LambdaTree) =>
+            {
+                List<int> NodesList = new List<int>();
+                foreach (int Node in LambdaTree)
+                {
+                    NodesList.Add(Node);
+                }
+                return NodesList;
+            };
+
+            AscendingBinaryTree AscendingOrder = (LambdaTree) =>
+            {
+                List<int> NodesList = ListerLambda(LambdaTree);
+                NodesList.Sort();
+                for (int NodeIndex = 0; NodeIndex <= NodesQuantity - 1; ++NodeIndex)
+                {
+                    Console.WriteLine(NodesList[NodeIndex]);
+                }
+            };
+
+            DescendingBinaryTree DescendingOrder = (LambdaTree) =>
+            {
+                List<int> NodesList = ListerLambda(LambdaTree);
+                NodesList.Sort();
+                NodesList.Reverse();
+                for (int NodeIndex = 0; NodeIndex <= NodesQuantity - 1; ++NodeIndex)
+                {
+                    Console.WriteLine(NodesList[NodeIndex]);
+                }
+            };
+
+            Console.WriteLine("Вершины дерева в порядке убывания:");
+            DescendingOrder(Tree);
+            Console.WriteLine("Вершины дерева в порядке возрастания:");
+            AscendingOrder(Tree);
+            Console.WriteLine();
+            Console.ReadKey();
         }
     }
 }
