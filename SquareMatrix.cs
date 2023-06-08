@@ -43,6 +43,7 @@ namespace Lab3
             }
         }
 
+       
         public static SquareMatrix operator +(SquareMatrix LeftMatrix, SquareMatrix RightMatrix)
         {
             SquareMatrix Result = new SquareMatrix(LeftMatrix.Size);
@@ -153,7 +154,7 @@ namespace Lab3
 
             return (SumLeftMatrix > SumRightMatrix);
         }
-         
+
         public static bool operator <=(SquareMatrix LeftMatrix, SquareMatrix RightMatrix)
         {
             int SumLeftMatrix = 0;
@@ -334,7 +335,7 @@ namespace Lab3
             return MatrixString;
         }
 
-        public static int CompareTo(SquareMatrix LeftMatrix, SquareMatrix RightMatrix)
+        public int CompareTo(SquareMatrix LeftMatrix, SquareMatrix RightMatrix)
         {
             int SumLeftMatrix = 0;
             int SumRightMatrix = 0;
