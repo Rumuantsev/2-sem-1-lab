@@ -1,79 +1,94 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Lab7
 {
     public class BinaryTree<T> : IEnumerable<T> where T : IComparable<T>
     {
-        private BinaryTree<T> ParentElement, LeftElement, RightElement;
+        private BinaryTree<T> ParentNode, LeftNode, RightNode;
         private T Value;
 
         public BinaryTree(T value, BinaryTree<T> parent)
         {
             Value = value;
-            ParentElement = parent;
+            ParentNode = parent;
         }
 
         public void Add(T value)
         {
             if (value.CompareTo(this.Value) < 0)
             {
-                if (LeftElement == null)
+                if (LeftNode == null)
                 {
-                    LeftElement = new BinaryTree<T>(value, this);
+                    LeftNode = new BinaryTree<T>(value, this);
                 }
                 else
                 {
-                    LeftElement.Add(value);
+                    LeftNode.Add(value);
                 }
             }
             else
             {
-                if (RightElement == null)
+                if (RightNode == null)
                 {
-                    RightElement = new BinaryTree<T>(value, this);
+                    RightNode = new BinaryTree<T>(value, this);
                 }
                 else
                 {
-                    RightElement.Add(value);
+                    RightNode.Add(value);
                 }
             }
         }
 
         public BinaryTree<T> Current() => this;
 
+
         public BinaryTree<T> Next()
         {
-            if (LeftElement != null)
+            if (RightNode == null)
             {
-                return LeftElement;
+                if (this == ParentNode.RightNode)
+                {
+                    return DeadEndNext(this); 
+                }
+                else
+                {
+                    return ParentNode.Next();
+                }
             }
-            else if (RightElement != null)
+            else 
             {
-                return RightElement;
-            }
-            else
-            {
-                BinaryTree<T> CurrentElement = this;
-                BinaryTree<T> RightNeighbour = ParentElement.RightElement;
-                return DeadEndNext(CurrentElement, RightNeighbour);
+                BinaryTree<T> FinalLeftNode = RightNode.LeftNode;
+                while (FinalLeftNode != null) 
+                {
+                    FinalLeftNode = FinalLeftNode.LeftNode;
+                }
+
+                return FinalLeftNode;
             }
         }
 
-        private BinaryTree<T> DeadEndNext(BinaryTree<T> CurrentElement, BinaryTree<T> RightNeighbour)
+        private BinaryTree<T> DeadEndNext(BinaryTree<T> CurrentElement)
         {
-            if (CurrentElement == RightNeighbour)
+            BinaryTree<T> FinalParentNode = CurrentElement.ParentNode;
+            if (FinalParentNode != null)
             {
-                return DeadEndNext(RightNeighbour, RightNeighbour.ParentElement.RightElement);
+                while (FinalParentNode != null)
+                {
+                    FinalParentNode = FinalParentNode.ParentNode;
+                }
+                return FinalParentNode;
             }
             else
             {
-                return RightNeighbour;
+               return CurrentElement.Next();
             }
+            
         }
 
-        public BinaryTree<T> Previous() => ParentElement;
+        public BinaryTree<T> Previous() => ParentNode;
 
         public static BinaryTree<T> operator ++(BinaryTree<T> CurrentNode)
         {
@@ -87,9 +102,9 @@ namespace Lab7
 
         public IEnumerator<T> GetEnumerator()
         {
-            if (LeftElement != null)
+            if (LeftNode != null)
             {
-                foreach (var item in LeftElement)
+                foreach (var item in LeftNode)
                 {
                     yield return item;
                 }
@@ -97,9 +112,9 @@ namespace Lab7
 
             yield return Value;
 
-            if (RightElement != null)
+            if (RightNode != null)
             {
-                foreach (var Element in RightElement)
+                foreach (var Element in RightNode)
                 {
                     yield return Element;
                 }
@@ -108,9 +123,9 @@ namespace Lab7
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            if (LeftElement != null)
+            if (LeftNode != null)
             {
-                foreach (var Element in LeftElement)
+                foreach (var Element in LeftNode)
                 {
                     yield return Element;
                 }
@@ -118,9 +133,9 @@ namespace Lab7
 
             yield return Value;
 
-            if (RightElement != null)
+            if (RightNode != null)
             {
-                foreach (var Element in RightElement)
+                foreach (var Element in RightNode)
                 {
                     yield return Element;
                 }
